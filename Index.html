@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:sans-serif;background:#0D1117;color:#E6EDF3;}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:200px;background:#161B22;
+         border-right:1px solid #30363D;padding:16px;overflow-y:auto;}
+.main{margin-left:200px;padding:16px 24px;}
+.nav{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;}
+.nav-btn{padding:5px 14px;border-radius:6px;font-size:11px;cursor:pointer;
+         border:1px solid #30363D;background:#1C2333;color:#7D8590;}
+.nav-btn.active{background:#2F81F7;color:#fff;border-color:#2F81F7;}
+.section-title{font-family:monospace;font-size:10px;text-transform:uppercase;
+               letter-spacing:0.1em;color:#7D8590;margin-bottom:12px;
+               padding-bottom:6px;border-bottom:1px solid #30363D;}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+.kpi-card{background:#161B22;border:1px solid #30363D;border-radius:8px;padding:12px;}
+.kpi-label{font-size:10px;color:#7D8590;margin-bottom:4px;}
+.kpi-val{font-size:22px;font-weight:500;color:#E6EDF3;}
+.kpi-sub{font-size:10px;color:#7D8590;margin-top:2px;}
+.std-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.std-card{background:#161B22;border:1px solid #30363D;border-radius:8px;padding:12px;}
+.std-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.std-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+.std-name{font-size:12px;font-weight:500;color:#E6EDF3;}
+.std-msn{font-size:10px;color:#7D8590;}
+.std-kpis{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;}
+.std-kpi{background:#0D1117;border-radius:4px;padding:6px 8px;}
+.std-kpi-lbl{font-size:9px;color:#7D8590;}
+.std-kpi-val{font-size:14px;font-weight:500;color:#E6EDF3;}
+.burn-bar{width:100%;height:6px;background:#21262D;border-radius:3px;overflow:hidden;margin-top:2px;}
+.burn-fill{height:100%;border-radius:3px;}
+.burn-lbl{display:flex;justify-content:space-between;font-size:9px;color:#7D8590;margin-top:3px;}
+.expander{border:1px solid #30363D;border-radius:6px;margin-bottom:8px;overflow:hidden;}
+.exp-hdr{display:flex;align-items:center;justify-content:space-between;
+         padding:8px 12px;background:#161B22;cursor:pointer;font-size:11px;color:#E6EDF3;}
+.exp-body{padding:12px;background:#0D1117;}
+.msn-table{width:100%;border-collapse:collapse;font-size:11px;}
+.msn-table th{text-align:left;color:#7D8590;font-weight:400;padding:4px 8px;
+              border-bottom:1px solid #30363D;font-size:10px;}
+.msn-table td{padding:5px 8px;border-bottom:1px solid #21262D;color:#E6EDF3;}
+.msn-table tr:last-child td{border-bottom:none;}
+.sb-label{font-size:9px;text-transform:uppercase;letter-spacing:0.08em;
+          color:#7D8590;margin-bottom:4px;margin-top:12px;}
+.sb-title{font-size:13px;font-weight:500;color:#E6EDF3;margin-bottom:16px;
+          padding-bottom:10px;border-bottom:1px solid #30363D;}
+.filter-item{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:11px;color:#C0C8D8;}
+.filter-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+.filter-cb{width:12px;height:12px;border:1px solid #30363D;border-radius:2px;
+           background:#1C2333;flex-shrink:0;font-size:8px;color:#2F81F7;
+           display:flex;align-items:center;justify-content:center;}
+.chart-wrap{background:#161B22;border:1px solid #30363D;border-radius:8px;padding:14px;margin-bottom:16px;}
+.bar-h-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.bar-h-lbl{width:80px;font-size:10px;color:#7D8590;text-align:right;flex-shrink:0;}
+.bar-h-track{flex:1;height:18px;background:#21262D;border-radius:3px;overflow:hidden;}
+.bar-h-val{font-size:10px;color:#7D8590;width:40px;text-align:right;flex-shrink:0;}
+.page{display:none;}
+.page.active{display:block;}
+</style>
+</head>
+<body>
+<div style="display:flex;min-height:500px;">
+
+<div class="sidebar">
+  <div class="sb-title">Dashboard REC</div>
+  <div class="sb-label">Standard</div>
+  <div class="filter-item"><div class="filter-cb">✓</div><div class="filter-dot" style="background:#378ADD;"></div>STD-A</div>
+  <div class="filter-item"><div class="filter-cb">✓</div><div class="filter-dot" style="background:#1D9E75;"></div>STD-B</div>
+  <div class="filter-item"><div class="filter-cb">✓</div><div class="filter-dot" style="background:#D4537E;"></div>STD-C</div>
+  <div class="sb-label">Version</div>
+  <div class="filter-item"><div class="filter-cb">✓</div><span style="font-size:10px;color:#7D8590;">V1</span></div>
+  <div class="filter-item"><div class="filter-cb">✓</div><span style="font-size:10px;color:#7D8590;">V2</span></div>
+  <div class="filter-item"><div class="filter-cb">✓</div><span style="font-size:10px;color:#7D8590;">V3</span></div>
+  <div class="sb-label">MSN</div>
+  <div style="font-size:10px;color:#7D8590;padding:4px 0;">Vide = tout</div>
+</div>
+
+<div class="main">
+  <div class="nav">
+    <div class="nav-btn active" onclick="showPage('general',this)">Vue générale</div>
+    <div class="nav-btn" onclick="showPage('section',this)">Par section</div>
+    <div class="nav-btn" onclick="showPage('ca',this)">Par CA</div>
+    <div class="nav-btn" onclick="showPage('inflow',this)">Par type inflow</div>
+    <div class="nav-btn" onclick="showPage('prefal',this)">PRE-FAL vs FAL</div>
+  </div>
+
+  <!-- VUE GENERALE -->
+  <div class="page active" id="page-general">
+    <div class="section-title">KPIs globaux — tous standards</div>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">Total RNs</div><div class="kpi-val">4 821</div><div class="kpi-sub">tous MSNs</div></div>
+      <div class="kpi-card"><div class="kpi-label">Heures totales</div><div class="kpi-val">12 340h</div><div class="kpi-sub">TIME_REAL</div></div>
+      <div class="kpi-card"><div class="kpi-label">% Burned global</div><div class="kpi-val">58%</div><div class="kpi-sub">2 796 RNs clôturées</div></div>
+      <div class="kpi-card"><div class="kpi-label">MSNs actifs</div><div class="kpi-val">18</div><div class="kpi-sub">3 standards</div></div>
+    </div>
+
+    <div class="section-title">Par standard</div>
+    <div class="std-grid">
+      <div class="std-card">
+        <div class="std-header"><div class="std-dot" style="background:#378ADD;"></div>
+          <div><div class="std-name">STD-A</div><div class="std-msn">7 MSNs · V1, V2</div></div></div>
+        <div class="std-kpis">
+          <div class="std-kpi"><div class="std-kpi-lbl">RNs</div><div class="std-kpi-val">1 820</div></div>
+          <div class="std-kpi"><div class="std-kpi-lbl">Heures</div><div class="std-kpi-val">4 210h</div></div>
+        </div>
+        <div class="burn-bar"><div class="burn-fill" style="width:72%;background:#1D9E75;"></div></div>
+        <div class="burn-lbl"><span>Burned</span><span>72%</span></div>
+      </div>
+      <div class="std-card">
+        <div class="std-header"><div class="std-dot" style="background:#1D9E75;"></div>
+          <div><div class="std-name">STD-B</div><div class="std-msn">6 MSNs · V1, V3</div></div></div>
+        <div class="std-kpis">
+          <div class="std-kpi"><div class="std-kpi-lbl">RNs</div><div class="std-kpi-val">1 540</div></div>
+          <div class="std-kpi"><div class="std-kpi-lbl">Heures</div><div class="std-kpi-val">3 890h</div></div>
+        </div>
+        <div class="burn-bar"><div class="burn-fill" style="width:54%;background:#1D9E75;"></div></div>
+        <div class="burn-lbl"><span>Burned</span><span>54%</span></div>
+      </div>
+      <div class="std-card">
+        <div class="std-header"><div class="std-dot" style="background:#D4537E;"></div>
+          <div><div class="std-name">STD-C</div><div class="std-msn">5 MSNs · V2, V3</div></div></div>
+        <div class="std-kpis">
+          <div class="std-kpi"><div class="std-kpi-lbl">RNs</div><div class="std-kpi-val">1 461</div></div>
+          <div class="std-kpi"><div class="std-kpi-lbl">Heures</div><div class="std-kpi-val">4 240h</div></div>
+        </div>
+        <div class="burn-bar"><div class="burn-fill" style="width:45%;background:#D4537E;"></div></div>
+        <div class="burn-lbl"><span>Burned</span><span>45%</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Détail par MSN — cliquer pour dérouler</div>
+    <div class="expander">
+      <div class="exp-hdr" onclick="toggleExp(this)">
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#378ADD;margin-right:6px;"></span>STD-A — 7 MSNs</span>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="exp-body">
+        <table class="msn-table">
+          <tr><th>MSN</th><th>Version</th><th>RNs</th><th>Heures</th><th>Moy. hors WR</th><th>% Burned</th><th>% Handover</th></tr>
+          <tr><td>700</td><td>V1</td><td>312</td><td>820h</td><td>2.6h</td><td style="color:#1D9E75;">78%</td><td>12%</td></tr>
+          <tr><td>701</td><td>V1</td><td>298</td><td>740h</td><td>2.5h</td><td style="color:#1D9E75;">71%</td><td>9%</td></tr>
+          <tr><td>702</td><td>V2</td><td>241</td><td>580h</td><td>2.4h</td><td style="color:#F59E0B;">52%</td><td>15%</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="expander">
+      <div class="exp-hdr" onclick="toggleExp(this)">
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#1D9E75;margin-right:6px;"></span>STD-B — 6 MSNs</span>
+        <span class="arrow">▶</span>
+      </div>
+      <div class="exp-body" style="display:none;">
+        <table class="msn-table">
+          <tr><th>MSN</th><th>Version</th><th>RNs</th><th>Heures</th><th>Moy. hors WR</th><th>% Burned</th><th>% Handover</th></tr>
+          <tr><td>800</td><td>V1</td><td>280</td><td>710h</td><td>2.5h</td><td style="color:#F59E0B;">55%</td><td>8%</td></tr>
+          <tr><td>802</td><td>V3</td><td>310</td><td>790h</td><td>2.5h</td><td style="color:#DC2626;">45%</td><td>14%</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="expander">
+      <div class="exp-hdr" onclick="toggleExp(this)">
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#D4537E;margin-right:6px;"></span>STD-C — 5 MSNs</span>
+        <span class="arrow">▶</span>
+      </div>
+      <div class="exp-body" style="display:none;">
+        <table class="msn-table">
+          <tr><th>MSN</th><th>Version</th><th>RNs</th><th>Heures</th><th>Moy. hors WR</th><th>% Burned</th><th>% Handover</th></tr>
+          <tr><td>900</td><td>V2</td><td>295</td><td>750h</td><td>2.5h</td><td style="color:#DC2626;">42%</td><td>16%</td></tr>
+          <tr><td>901</td><td>V2</td><td>310</td><td>810h</td><td>2.6h</td><td style="color:#DC2626;">44%</td><td>13%</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- VUE PAR SECTION -->
+  <div class="page" id="page-section">
+    <div class="section-title">Heures par section — groupées par standard</div>
+    <div class="chart-wrap">
+      <div style="font-size:10px;color:#7D8590;margin-bottom:10px;">Heures totales par section</div>
+      <div class="bar-h-row">
+        <div class="bar-h-lbl">Section 21</div>
+        <div class="bar-h-track"><div style="display:flex;height:100%;">
+          <div style="width:35%;background:#378ADD44;color:#378ADD;font-size:9px;display:flex;align-items:center;padding-left:4px;border-right:1px solid #0D1117;">820h</div>
+          <div style="width:25%;background:#1D9E7544;color:#1D9E75;font-size:9px;display:flex;align-items:center;padding-left:4px;border-right:1px solid #0D1117;">580h</div>
+          <div style="width:20%;background:#D4537E44;color:#D4537E;font-size:9px;display:flex;align-items:center;padding-left:4px;">470h</div>
+        </div></div>
+        <div class="bar-h-val">1 870h</div>
+      </div>
+      <div class="bar-h-row">
+        <div class="bar-h-lbl">Section 23</div>
+        <div class="bar-h-track"><div style="display:flex;height:100%;">
+          <div style="width:28%;background:#378ADD44;color:#378ADD;font-size:9px;display:flex;align-items:center;padding-left:4px;border-right:1px solid #0D1117;">650h</div>
+          <div style="width:30%;background:#1D9E7544;color:#1D9E75;font-size:9px;display:flex;align-items:center;padding-left:4px;border-right:1px solid #0D1117;">710h</div>
+          <div style="width:22%;background:#D4537E44;color:#D4537E;font-size:9px;display:flex;align-items:center;padding-left:4px;">520h</div>
+        </div></div>
+        <div class="bar-h-val">1 880h</div>
+      </div>
+      <div class="bar-h-row">
+        <div class="bar-h-lbl">Section 13/14</div>
+        <div class="bar-h-track"><div style="display:flex;height:100%;">
+          <div style="width:40%;background:#378ADD44;color:#378ADD;font-size:9px;display:flex;align-items:center;padding-left:4px;border-right:1px solid #0D1117;">940h</div>
+          <div style="width:18%;background:#1D9E7544;color:#1D9E75;font-size:9px;display:flex;align-items:center;padding-left:4px;border-right:1px solid #0D1117;">420h</div>
+          <div style="width:15%;background:#D4537E44;color:#D4537E;font-size:9px;display:flex;align-items:center;padding-left:4px;">350h</div>
+        </div></div>
+        <div class="bar-h-val">1 710h</div>
+      </div>
+      <div class="bar-h-row">
+        <div class="bar-h-lbl">Section 18</div>
+        <div class="bar-h-track"><div style="display:flex;height:100%;">
+          <div style="width:22%;background:#378ADD44;color:#378ADD;font-size:9px;display:flex;align-items:center;padding-left:4px;border-right:1px solid #0D1117;">510h</div>
+          <div style="width:26%;background:#1D9E7544;color:#1D9E75;font-size:9px;display:flex;align-items:center;padding-left:4px;border-right:1px solid #0D1117;">610h</div>
+          <div style="width:19%;background:#D4537E44;color:#D4537E;font-size:9px;display:flex;align-items:center;padding-left:4px;">440h</div>
+        </div></div>
+        <div class="bar-h-val">1 560h</div>
+      </div>
+      <div style="display:flex;gap:16px;margin-top:12px;">
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#7D8590;"><div style="width:10px;height:10px;border-radius:2px;background:#378ADD;"></div>STD-A</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#7D8590;"><div style="width:10px;height:10px;border-radius:2px;background:#1D9E75;"></div>STD-B</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#7D8590;"><div style="width:10px;height:10px;border-radius:2px;background:#D4537E;"></div>STD-C</div>
+      </div>
+    </div>
+
+    <div class="section-title">Détail par MSN</div>
+    <div class="expander">
+      <div class="exp-hdr" onclick="toggleExp(this)">
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#378ADD;margin-right:6px;"></span>STD-A — détail par MSN</span>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="exp-body">
+        <table class="msn-table">
+          <tr><th>MSN</th><th>S21</th><th>S23</th><th>S13/14</th><th>S18</th><th>Total</th></tr>
+          <tr><td>700</td><td>210h</td><td>180h</td><td>240h</td><td>190h</td><td>820h</td></tr>
+          <tr><td>701</td><td>195h</td><td>165h</td><td>210h</td><td>170h</td><td>740h</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-ca"><div class="section-title">Par CA — à venir</div></div>
+  <div class="page" id="page-inflow"><div class="section-title">Par type inflow — à venir</div></div>
+  <div class="page" id="page-prefal"><div class="section-title">PRE-FAL vs FAL — à venir</div></div>
+</div>
+</div>
+
+<script>
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleExp(hdr) {
+  const body = hdr.nextElementSibling;
+  const arrow = hdr.querySelector('.arrow');
+  if (body.style.display === 'none') {
+    body.style.display = 'block';
+    arrow.textContent = '▼';
+  } else {
+    body.style.display = 'none';
+    arrow.textContent = '▶';
+  }
+}
+</script>
+</body>
+</html>
